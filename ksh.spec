@@ -8,7 +8,7 @@ Group:        System Environment/Shells
 #EPL everywhere else (for KSH itself)
 License:      EPL
 Version:      20120801
-Release:      33%{?dist}
+Release:      34%{?dist}
 Source0:      http://www.research.att.com/~gsf/download/tgz/ast-ksh.%{releasedate}.tgz
 Source1:      http://www.research.att.com/~gsf/download/tgz/INIT.%{releasedate}.tgz
 Source3:      kshrc.rhs
@@ -168,6 +168,9 @@ Patch65: ksh-20120801-parserfix.patch
 # sent upstream, for ksh <= 2014-09-29, rhbz#1212992
 Patch66: ksh-20140801-diskfull.patch
 
+# Sent upstream, rhbz#1324990
+Patch67: ksh-20120801-subshell-leak.patch
+
 BuildRoot:    %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Conflicts:    pdksh
 Requires: coreutils, diffutils, chkconfig
@@ -237,6 +240,7 @@ with "sh" (the Bourne Shell).
 %patch64 -p1 -b .nohupfork
 %patch65 -p1 -b .parserfix
 %patch66 -p1 -b .diskfull
+%patch67 -p1 -b .subshell-leak
 
 cp %{SOURCE5} .
 
@@ -354,6 +358,10 @@ fi
     rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Thu May 18 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-34
+- Fix a memory leak while creating subshells
+  Resolves: #1324990
+
 * Fri Jan 08 2016 Michal Hlavinka <mhlavink@redhat.com> - 20120801-33
 - ksh crashed when disk was full (#1212992)
 
