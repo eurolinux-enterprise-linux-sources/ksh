@@ -1,0 +1,7 @@
+For more information about changes see RELEASE file.
+
+Important changes not mentioned in RELEASE:
+2007-01-11	getopts built-in no longer support parenthesis
+
+
+

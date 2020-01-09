@@ -1,0 +1,12 @@
+diff -up ksh-20120801/src/cmd/ksh93/bltins/typeset.c.revert001 ksh-20120801/src/cmd/ksh93/bltins/typeset.c
+--- ksh-20120801/src/cmd/ksh93/bltins/typeset.c.revert001	2012-07-25 17:10:18.000000000 +0200
++++ ksh-20120801/src/cmd/ksh93/bltins/typeset.c	2013-07-04 17:24:28.576311892 +0200
+@@ -673,7 +673,7 @@ static int     setall(char **argv,regist
+ 			}
+ 			if(!nv_isarray(np) && !strchr(name,'=') && !(shp->envlist  && nv_onlist(shp->envlist,name)))
+ 			{
+-				if(comvar || (shp->last_root==shp->var_tree && (tp->tp || (!shp->st.real_fun && (nvflags&NV_STATIC)) || (!(flag&(NV_EXPORT|NV_RDONLY)) && nv_isattr(np,(NV_EXPORT|NV_IMPORT))==(NV_EXPORT|NV_IMPORT)))))
++				if(comvar || (shp->last_root==shp->var_tree && (tp->tp || (!shp->st.real_fun && (nvflags&NV_STATIC)))))
+ {
+ 					_nv_unset(np,0);
+ }
