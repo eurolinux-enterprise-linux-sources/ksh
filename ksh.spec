@@ -8,7 +8,7 @@ Group:        System Environment/Shells
 #EPL everywhere else (for KSH itself)
 License:      EPL
 Version:      20120801
-Release:      34%{?dist}
+Release:      35%{?dist}
 Source0:      http://www.research.att.com/~gsf/download/tgz/ast-ksh.%{releasedate}.tgz
 Source1:      http://www.research.att.com/~gsf/download/tgz/INIT.%{releasedate}.tgz
 Source3:      kshrc.rhs
@@ -171,6 +171,9 @@ Patch66: ksh-20140801-diskfull.patch
 # Sent upstream, rhbz#1324990
 Patch67: ksh-20120801-subshell-leak.patch
 
+# rhbz#1437530
+Patch68: ksh-20120801-dotdoublefree.patch
+
 BuildRoot:    %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Conflicts:    pdksh
 Requires: coreutils, diffutils, chkconfig
@@ -241,6 +244,7 @@ with "sh" (the Bourne Shell).
 %patch65 -p1 -b .parserfix
 %patch66 -p1 -b .diskfull
 %patch67 -p1 -b .subshell-leak
+%patch68 -p1 -b .dotdoublefree
 
 cp %{SOURCE5} .
 
@@ -358,6 +362,10 @@ fi
     rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Tue Jun 27 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-35
+- Fix a crash during clean up after sourcing multiple files
+  Resolves: #1437530
+
 * Thu May 18 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-34
 - Fix a memory leak while creating subshells
   Resolves: #1324990
