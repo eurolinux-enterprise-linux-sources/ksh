@@ -8,7 +8,7 @@ Group:        System Environment/Shells
 #EPL everywhere else (for KSH itself)
 License:      EPL
 Version:      20120801
-Release:      36%{?dist}
+Release:      37%{?dist}
 Source0:      http://www.research.att.com/~gsf/download/tgz/ast-ksh.%{releasedate}.tgz
 Source1:      http://www.research.att.com/~gsf/download/tgz/INIT.%{releasedate}.tgz
 Source3:      kshrc.rhs
@@ -177,6 +177,9 @@ Patch68: ksh-20120801-dotdoublefree.patch
 # rhbz#1454804
 Patch69: ksh-20120801-signal-bubbling.patch
 
+# rhbz#1506344
+Patch70: ksh-20120801-validate-fd.patch
+
 BuildRoot:    %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Conflicts:    pdksh
 Requires: coreutils, diffutils, chkconfig
@@ -249,6 +252,7 @@ with "sh" (the Bourne Shell).
 %patch67 -p1 -b .subshell-leak
 %patch68 -p1 -b .dotdoublefree
 %patch69 -p1 -b .signal-bubbling
+%patch70 -p1 -b .validate-fd
 
 cp %{SOURCE5} .
 
@@ -366,6 +370,10 @@ fi
     rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Thu Jan 18 2018 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-37
+- Fix a crash due to out of bounds write
+  Resolves: #1506344
+
 * Mon Oct 30 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-36
 - Add configuration option to enable signal bubbling for backward compatibility
   Resolves: #1454804
