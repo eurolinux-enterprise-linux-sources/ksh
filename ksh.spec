@@ -8,7 +8,7 @@ Group:        System Environment/Shells
 #CPL everywhere else (for KSH itself)
 License:      EPL
 Version:      20120801
-Release:      26%{?dist}
+Release:      34%{?dist}
 Source0:      http://www.research.att.com/~gsf/download/tgz/ast-ksh.%{releasedate}.tgz
 Source1:      http://www.research.att.com/~gsf/download/tgz/INIT.%{releasedate}.tgz
 Source2:      kshcomp.conf
@@ -156,6 +156,27 @@ Patch66: ksh-20120801-oldenvinit.patch
 # from upsteam, for ksh < 2012-10-04, rhbz#1193557
 Patch67: ksh-20120801-emptyarrayinit.patch
 
+# not upstream yet, rhbz#1371630
+Patch68: ksh-20120801-typeset.patch
+
+# not upstream yet, rhbz#1321443
+Patch69: ksh-20120801-dotdoublefree.patch
+
+# not upstream yet, rhbz#1405784
+Patch70: ksh-20120801-subshell-leak.patch
+
+# rhbz#1189297
+Patch71: ksh-20120801-assoc-unset-leak.patch
+
+# rhbz#1222025
+Patch72: ksh-20120801-unset-param.patch
+
+# rhbz#1269088
+Patch73: ksh-20120801-badgcc.patch
+
+# rhbz#1299484
+Patch74: ksh-20120801-mb-after-argvar.patch
+
 BuildRoot:    %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Conflicts:    pdksh
 Requires: coreutils, diffutils, chkconfig
@@ -222,6 +243,13 @@ with "sh" (the Bourne Shell).
 %patch65 -p1 -b .parserfix
 %patch66 -p1 -b .oldenvinit
 %patch67 -p1 -b .emptyarrayinit
+%patch68 -p1 -b .typeset_a
+%patch69 -p1 -b .dotdoublefree
+%patch70 -p1 -b .subshell-leak
+%patch71 -p1 -b .assoc-unset-leak
+%patch72 -p1 -b .unset-param
+%patch73 -p1 -b .badgcc
+%patch74 -p1 -b .mb-after-argvar
 
 #/dev/fd test does not work because of mock
 sed -i 's|ls /dev/fd|ls /proc/self/fd|' src/cmd/ksh93/features/options
@@ -347,6 +375,38 @@ fi
     rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Fri Feb 10 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-34
+- Multibyte character string after $1-9 was not expanded correctly
+  Resolves: #1299484
+
+* Fri Feb 10 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-33
+- Prevent null-test optimization in strdup
+  Resolves: #1269088
+
+* Fri Feb 10 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-32
+- Treat unset parameters as error
+  Resolves: #1222025
+
+* Fri Feb 10 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-31
+- Fix a memory leak on unset of associative array
+  Resolves: #1189297
+
+* Fri Feb 10 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-30
+- Fix a memory leak in subshell when PATH is set
+  Resolves: #1405784
+
+* Fri Feb 10 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-29
+- Fix a crash during clean up after sourcing multiple files
+  Resolves: #1321443
+
+* Fri Feb 10 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-28
+- Fix a bug in memory allocation while listing indexed arrays with typeset
+  Resolves: #1371630
+
+* Fri Feb 10 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-27
+- bump release
+  Resolves: #1391931
+
 * Tue Apr 26 2016 Michal Hlavinka <mhlavink@redhat.com> - 20120801-26
 - closing a file descriptor in a command substitution caused loss of the output (#1202439)
 - fix: in a login shell "( cmd & )" does nothing (#1217237)
