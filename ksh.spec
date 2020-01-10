@@ -8,7 +8,7 @@ Group:        System Environment/Shells
 #CPL everywhere else (for KSH itself)
 License:      EPL
 Version:      20120801
-Release:      34%{?dist}
+Release:      35%{?dist}
 Source0:      http://www.research.att.com/~gsf/download/tgz/ast-ksh.%{releasedate}.tgz
 Source1:      http://www.research.att.com/~gsf/download/tgz/INIT.%{releasedate}.tgz
 Source2:      kshcomp.conf
@@ -177,6 +177,9 @@ Patch73: ksh-20120801-badgcc.patch
 # rhbz#1299484
 Patch74: ksh-20120801-mb-after-argvar.patch
 
+# rhbz#1484937
+Patch75: ksh-20120801-signal-bubbling.patch
+
 BuildRoot:    %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Conflicts:    pdksh
 Requires: coreutils, diffutils, chkconfig
@@ -250,6 +253,7 @@ with "sh" (the Bourne Shell).
 %patch72 -p1 -b .unset-param
 %patch73 -p1 -b .badgcc
 %patch74 -p1 -b .mb-after-argvar
+%patch75 -p1 -b .signal-bubbling
 
 #/dev/fd test does not work because of mock
 sed -i 's|ls /dev/fd|ls /proc/self/fd|' src/cmd/ksh93/features/options
@@ -375,6 +379,10 @@ fi
     rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Jan 24 2018 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-35
+- Add configuration option to enable signal bubbling for backward compatibility
+  Resolves: #1484937
+
 * Fri Feb 10 2017 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-34
 - Multibyte character string after $1-9 was not expanded correctly
   Resolves: #1299484
