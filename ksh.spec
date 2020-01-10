@@ -8,7 +8,7 @@ Group:        System Environment/Shells
 #CPL everywhere else (for KSH itself)
 License:      EPL
 Version:      20120801
-Release:      137%{?dist}
+Release:      139%{?dist}
 Source0:      http://www.research.att.com/~gsf/download/tgz/ast-ksh.%{releasedate}.tgz
 Source1:      http://www.research.att.com/~gsf/download/tgz/INIT.%{releasedate}.tgz
 Source2:      kshcomp.conf
@@ -186,6 +186,12 @@ Patch76: ksh-20120801-jobwait-sigstop.patch
 # rhbz#1484937
 Patch77: ksh-20120801-signal-bubbling.patch
 
+# rhbz#1506347
+Patch78: ksh-20120801-validate-fd.patch
+
+# rhbz#1546749
+Patch79: ksh-20120801-nv_open-memcmp.patch
+
 BuildRoot:    %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Conflicts:    pdksh
 Requires: coreutils, diffutils, chkconfig
@@ -262,6 +268,8 @@ with "sh" (the Bourne Shell).
 %patch75 -p1 -b .kia-warning
 %patch76 -p1 -b .jobwait-sigstop
 %patch77 -p1 -b .signal-bubbling
+%patch78 -p1 -b .validate-fd
+%patch79 -p1 -b .nv_open-memcmp
 
 #/dev/fd test does not work because of mock
 sed -i 's|ls /dev/fd|ls /proc/self/fd|' src/cmd/ksh93/features/options
@@ -387,6 +395,14 @@ fi
     rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Mon May 28 2018 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-139
+- Fix a crash caused by memcmp()
+  Resolves: #1546749
+
+* Tue May 22 2018 Siteshwar Vashisht <svashisht@redhat.com> - 20120801-138
+- Fix a crash due to out of bounds write
+  Resolves: #1506347
+
 * Fri Feb 16 2018 Kamil Dudka <kdudka@redhat.com> - 20120801-137
 - Increase the release number by 100 to make sure it stays higher than in RHEL-6
   Related: #1484937
